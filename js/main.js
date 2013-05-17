@@ -45,7 +45,7 @@
 
   }
 })(jQuery);
-$(document).bind('touchstart', function(event) {
+$(document).bind('touchmove', function(event) {
   var orig = event.originalEvent;
   var x = orig.changedTouches[0].pageX;
   var y = orig.changedTouches[0].pageY;
