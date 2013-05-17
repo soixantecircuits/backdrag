@@ -9,7 +9,7 @@
             var $el = this.find(opt.handle);
         }
 
-        return $el.css('cursor', opt.cursor).on("mousedown touchstart", function(e) {
+        return $el.css('cursor', opt.cursor).on("touchmousedown", function(e) {
             if(opt.handle === "") {
                 var $drag = $(this).prev().addClass('draggable');
             } else {
@@ -20,7 +20,7 @@
                 drg_w = $drag.outerWidth(),
                 pos_y = $drag.offset().top + drg_h - e.pageY,
                 pos_x = $drag.offset().left + drg_w - e.pageX;
-            $drag.css('z-index', -1).parents().on("mousemove touchmove", function(e) {
+            $drag.css('z-index', -1).parents().on("touchmousedownmove", function(e) {
                 var topPosition = e.pageY + pos_y - drg_h,
                     leftPosition = e.pageX + pos_x - drg_w
                 $('.draggable').offset({
@@ -31,7 +31,7 @@
                 });
             });
             e.preventDefault(); // disable selection
-        }).on("mouseup touchend", function() {
+        }).on("touchmouseup", function() {
             if(opt.handle === "") {
                 $(this).prev().removeClass('draggable');
             } else {
