@@ -39,8 +39,8 @@
         var curX = (isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX),
         curY = (isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
         $('.draggable').offset({
-          top: curY,
-          left: curX
+          top: curY + pos_y - drg_h,
+          left: curX + pos_x - drg_w
         }).bind("mouseup touchend", function() {
           $(this).prev().removeClass('draggable').css('z-index', z_idx);
         });
