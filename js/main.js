@@ -45,13 +45,18 @@
 
   }
 })(jQuery);
-
-$("#image1").click(function(e) {
-  var parentOffset = $(this).parent().offset();
-  //or $(this).offset(); if you really just want the current element's offset
-  var relX = e.pageX - parentOffset.left;
-  var relY = e.pageY - parentOffset.top;
-  console.log(relX, ":", relY);
+$("#image2").pep({
+  shouldEase: false,
+  debug: false,
+  drag: function(ev, obj) {
+    var el = $(obj.el);
+    var topPosition = el.position().top,
+          leftPosition = el.position().left;
+    $('#image1').offset({
+          top: topPosition,
+          left: leftPosition
+      });
+  }
 });
 
-$("#image2").drags();
+//$("#image2").drags();
