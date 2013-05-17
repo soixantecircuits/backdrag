@@ -22,11 +22,12 @@
                 pos_x = $drag.offset().left + drg_w - e.pageX;
             $drag.css('z-index', -1).parents().on("mousemove touchmove", function(e) {
                 var topPosition = e.pageY + pos_y - drg_h,
-                    leftPosition = e.pageX + pos_x - drg_w
+                    leftPosition = e.pageX + pos_x - drg_w;
+                console.log(topPosition,':',leftPosition);
                 $('.draggable').offset({
                     top:topPosition,
                     left:leftPosition
-                }).on("mouseup", function() {
+                }).on("mouseup touchend", function() {
                     $(this).prev().removeClass('draggable').css('z-index', z_idx);
                 });
             });

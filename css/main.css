@@ -307,6 +307,7 @@ textarea {
 }
 
 .container img{
+  -webkit-tap-highlight-color: transparent;
   -moz-user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
