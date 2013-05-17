@@ -6,13 +6,23 @@
       cursor: "move"
     }, opt);
 
+    isTouch = function(reset) {
+      if (typeof(Modernizr) !== 'undefined') return Modernizr.touch;
+
+      if ('ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch)) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     if (opt.handle === "") {
       var $el = this;
     } else {
       var $el = this.find(opt.handle);
     }
 
-    return $el.css('cursor', opt.cursor).bind("mousedown touchstart", function(e) {
+    return $el.css('cursor', opt.cursor).bind("mousedown touchstart", function(ev) {
       if (opt.handle === "") {
         var $drag = $(this).prev().addClass('draggable');
       } else {
@@ -21,42 +31,31 @@
       var z_idx = $drag.css('z-index'),
         drg_h = $drag.outerHeight(),
         drg_w = $drag.outerWidth(),
-        pos_y = $drag.offset().top + drg_h - e.pageY,
-        pos_x = $drag.offset().left + drg_w - e.pageX;
-      $drag.css('z-index', -1).parents().bind("mousemove touchmove", function(e) {
-        var topPosition = e.pageY + pos_y - drg_h,
-          leftPosition = e.pageX + pos_x - drg_w;
-        console.log(topPosition, ':', leftPosition);
+        curX = (isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX),
+        curY = (isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY),
+        pos_y = $drag.offset().top + drg_h - curY,
+        pos_x = $drag.offset().left + drg_w - curX;
+      $drag.css('z-index', -1).parents().bind("mousemove touchmove", function(ev) {
+        var curX = (isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX),
+        curY = (isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
         $('.draggable').offset({
-          top: topPosition,
-          left: leftPosition
+          top: curY,
+          left: curX
         }).bind("mouseup touchend", function() {
           $(this).prev().removeClass('draggable').css('z-index', z_idx);
         });
       });
-      e.preventDefault(); // disable selection
-    }).bind("mouseup touchend", function() {
+      ev.preventDefault(); // disable selection
+    }).bind("mouseup touchend", function(ev) {
       if (opt.handle === "") {
         $(this).prev().removeClass('draggable');
       } else {
         $(this).prev().removeClass('active-handle').parent().removeClass('draggable');
       }
+      ev.preventDefault();
     });
 
   }
 })(jQuery);
-$("#image2").pep({
-  shouldEase: false,
-  debug: false,
-  drag: function(ev, obj) {
-    var el = $(obj.el);
-    var topPosition = el.position().top,
-          leftPosition = el.position().left;
-    $('#image1').offset({
-          top: topPosition,
-          left: leftPosition
-      });
-  }
-});
 
-//$("#image2").drags();
+$("#image2").drags();
